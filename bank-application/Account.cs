@@ -12,8 +12,8 @@ namespace bank_application
     {
         public string Number { get; }
         public string Owner { get; set; }
-        public decimal Balance 
-        { 
+        public decimal Balance
+        {
             get
             {
                 decimal balance = 0;
@@ -60,35 +60,42 @@ namespace bank_application
 
         private void MakeTransaction(decimal amount, DateTime date, string note, TransactionType type)
         {
+            // check for invalid amount
             if (amount <= 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(amount), "Amount must be positive");
+                Console.WriteLine("Error: Amount must be positive.");
+                return;
             }
+
+            // check for transaction limit
             if (transactionCount >= allTransactions.Length)
             {
-                throw new InvalidOperationException("Transaction limit reached");
+                Console.WriteLine("Error: Transaction limit reached.");
+                return;
             }
-            Transaction transaction;
+            Transaction transaction = null;
             switch (type)
             {
                 case TransactionType.Deposit:
-                    transaction = new Deposit(amount, date, note, this);
+                    transaction = new Deposit(amount, date, this);
                     break;
                 case TransactionType.Withdrawal:
-                    transaction = new Withdrawal(amount, date, note, this);
+                    transaction = new Withdrawal(amount, date, this);
                     break;
                 default:
-                    throw new InvalidOperationException("Unsupported transaction type");
+                    Console.WriteLine("Error: Unsupported transaction type.");
+                    return;
             }
-            allTransactions[transactionCount] = transaction;
-            transactionCount++;
+            if (transaction != null)
+            {
+                allTransactions[transactionCount] = transaction;
+                transactionCount++;
+            }
         }
 
         public Transaction[] GetTransactionHistory()
         {
-            Transaction[] history = new Transaction[transactionCount];
-            Array.Copy(allTransactions, history, transactionCount);
-            return history;
+            return allTransactions;
         }
     }
 }
