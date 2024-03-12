@@ -83,5 +83,13 @@ namespace bank_application
             allTransactions[transactionCount] = transaction;
             transactionCount++;
         }
+
+        public Transaction[] GetTransactionHistory()
+        {
+            Transaction[] history = new Transaction[transactionCount];
+            Array.Copy(allTransactions, history, transactionCount);
+            return history;
+        }
     }
 }
+

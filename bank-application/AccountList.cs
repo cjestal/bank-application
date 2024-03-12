@@ -34,6 +34,11 @@ namespace bank_application
             return accounts[index];
         }
 
+        public int GetCount()
+        {
+            return count;
+        }
+
         public bool DeleteAccount(string accountNumber)
         {
             for (int i = 0; i < count; i++)
